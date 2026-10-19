@@ -1,0 +1,6 @@
+streamlit
+supabase
+psycopg2-binary
+python-dotenv
+pandas
+sqlglot

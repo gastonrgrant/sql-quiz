@@ -1,0 +1,37 @@
+name: Check live quiz database
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check-database:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    env:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres.ocivaqbiadcehlnsklcg
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      DB_HOST: aws-0-us-east-1.pooler.supabase.com
+      DB_PORT: "5432"
+      DB_SSLMODE: require
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check database and quiz answers
+        run: python check_db.py
